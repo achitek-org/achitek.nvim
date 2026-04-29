@@ -2,88 +2,70 @@
 
 Neovim integration for Achitek projects.
 
-This plugin provides:
+## Features
 
-- `Achitekfile` filetype detection
-- `achitek-ls` language server setup
-- `nvim-treesitter` parser registration for `achitekfile`
+- Filetype detection for `Achitekfile` and `achitekfile`.
+- `achitek-ls` language server registration and startup.
+- Native `vim.lsp` support on newer Neovim versions.
+- `nvim-lspconfig` fallback for older Neovim versions.
+- `nvim-treesitter` parser registration for the `achitekfile` language.
+- `:checkhealth achitek` diagnostics for filetype, language server, parser, and query setup.
 
-Tree-sitter queries live in
-[`achitek-org/tree-sitter-achitek`](https://github.com/achitek-org/tree-sitter-achitek),
-which is the source of truth for Achitekfile syntax highlighting.
+## Configuration
 
-## Installation
-
-Install the language server first:
-
-```sh
-cargo install achitek-ls
-```
-
-Then install this plugin with your plugin manager.
-
-### lazy.nvim
-
-Install the parser with `nvim-treesitter`:
-
-```vim
-:TSInstall achitekfile
-```
-
-Make the grammar queries available on Neovim's `runtimepath`. With `lazy.nvim`,
-you can install the grammar repo as a runtime dependency:
+Call `setup()` from your Neovim config:
 
 ```lua
-{
-  "achitek-org/achitek.nvim",
-  dependencies = {
-    "achitek-org/tree-sitter-achitek",
-  },
-  ft = "achitekfile",
-  opts = {},
-}
+require("achitek").setup()
 ```
 
-Check your setup:
-
-```vim
-:checkhealth achitek
-```
-
-### Nix-managed Neovim
-
-If your Neovim distribution already provides the `achitekfile` tree-sitter parser,
-you can disable parser registration and keep only filetype/LSP setup:
+Default configuration:
 
 ```lua
 require("achitek").setup({
+  filetype = { -- Registers Achitek filenames with Neovim's filetype system.
+    enabled = true, -- Set to false if you define the filetype elsewhere.
+  },
+  lsp = { -- Configures the Achitek language server.
+    enabled = true, -- Set to false to skip LSP setup.
+    name = "achitek", -- Name used for the Neovim LSP client config.
+    cmd = { "achitek-ls" }, -- Command used to start the language server.
+    filetypes = { "achitekfile" }, -- Filetypes that should attach to achitek-ls.
+    root_markers = { { "Achitekfile" }, ".git" }, -- Project root markers for LSP workspaces.
+    single_file_support = true, -- Allow the server to attach outside a detected project root.
+  },
+  treesitter = { -- Registers the Achitek parser with nvim-treesitter.
+    enabled = true, -- Set to false if your Neovim distribution provides the parser.
+    parser_name = "achitekfile", -- Parser name used by nvim-treesitter.
+    install_info = { -- Parser installation metadata.
+      url = "https://github.com/achitek-org/tree-sitter-achitek", -- Grammar repository.
+      files = { "src/parser.c" }, -- Generated parser sources.
+      branch = "main", -- Grammar repository branch.
+      generate_requires_npm = false, -- Parser does not need npm during generation.
+      requires_generate_from_grammar = false, -- Parser sources are committed.
+    },
+    filetype = "achitekfile", -- Filetype associated with the parser.
+  },
+})
+```
+
+Disable individual integrations:
+
+```lua
+require("achitek").setup({
+  filetype = {
+    enabled = false,
+  },
+  lsp = {
+    enabled = false,
+  },
   treesitter = {
     enabled = false,
   },
 })
 ```
 
-## Configuration
-
-Defaults:
-
-```lua
-require("achitek").setup({
-  filetype = {
-    enabled = true,
-  },
-  lsp = {
-    enabled = true,
-    cmd = { "achitek-ls" },
-    root_markers = { { "Achitekfile" }, ".git" },
-  },
-  treesitter = {
-    enabled = true,
-  },
-})
-```
-
-Use a local development server build:
+Use a local `achitek-ls` build:
 
 ```lua
 require("achitek").setup({
@@ -95,5 +77,12 @@ require("achitek").setup({
 })
 ```
 
-If `achitek-ls` is not installed, the plugin registers the server config but does
-not enable it automatically. Install the server and reopen an `Achitekfile`.
+Customize project root detection:
+
+```lua
+require("achitek").setup({
+  lsp = {
+    root_markers = { { "Achitekfile" }, "achitek.toml", ".git" },
+  },
+})
+```
