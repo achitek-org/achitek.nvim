@@ -3,8 +3,8 @@ local M = {}
 local defaults = {
 	name = "achitek",
 	cmd = { "achitek-ls" },
-	filetypes = { "achitekfile" },
-	root_markers = { { "Achitekfile" }, ".git" },
+	filetypes = { "achitekfile", "tera" },
+	root_markers = { { "Achitekfile", "achitekfile" }, ".git" },
 	single_file_support = true,
 }
 

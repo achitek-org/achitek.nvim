@@ -3,6 +3,8 @@ require("achitek.filetype").setup()
 local cases = {
   Achitekfile = "achitekfile",
   achitekfile = "achitekfile",
+  ["README.md.tera"] = "tera",
+  ["main.py.tera"] = "tera",
 }
 
 for filename, expected in pairs(cases) do

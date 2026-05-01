@@ -37,6 +37,12 @@ function M.check()
     health.error("Achitekfile does not resolve to the achitekfile filetype")
   end
 
+  if vim.filetype.match({ filename = "README.md.tera" }) == "tera" then
+    health.ok(".tera files resolve to the tera filetype")
+  else
+    health.error(".tera files do not resolve to the tera filetype")
+  end
+
   if vim.fn.executable("achitek-ls") == 1 then
     health.ok("achitek-ls is executable")
   else

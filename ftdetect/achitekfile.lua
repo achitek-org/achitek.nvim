@@ -3,4 +3,7 @@ vim.filetype.add({
     Achitekfile = "achitekfile",
     achitekfile = "achitekfile",
   },
+  extension = {
+    tera = "tera",
+  },
 })

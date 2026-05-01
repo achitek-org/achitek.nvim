@@ -4,7 +4,7 @@ Neovim integration for Achitek projects.
 
 ## Features
 
-- Filetype detection for `Achitekfile` and `achitekfile`.
+- Filetype detection for `Achitekfile`, `achitekfile`, and `*.tera` templates.
 - `achitek-ls` language server registration and startup.
 - Native `vim.lsp` support on newer Neovim versions.
 - `nvim-lspconfig` fallback for older Neovim versions.
@@ -23,15 +23,15 @@ Default configuration:
 
 ```lua
 require("achitek").setup({
-  filetype = { -- Registers Achitek filenames with Neovim's filetype system.
+  filetype = { -- Registers Achitek filenames and .tera templates with Neovim's filetype system.
     enabled = true, -- Set to false if you define the filetype elsewhere.
   },
   lsp = { -- Configures the Achitek language server.
     enabled = true, -- Set to false to skip LSP setup.
     name = "achitek", -- Name used for the Neovim LSP client config.
     cmd = { "achitek-ls" }, -- Command used to start the language server.
-    filetypes = { "achitekfile" }, -- Filetypes that should attach to achitek-ls.
-    root_markers = { { "Achitekfile" }, ".git" }, -- Project root markers for LSP workspaces.
+    filetypes = { "achitekfile", "tera" }, -- Filetypes that should attach to achitek-ls.
+    root_markers = { { "Achitekfile", "achitekfile" }, ".git" }, -- Project root markers for LSP workspaces.
     single_file_support = true, -- Allow the server to attach outside a detected project root.
   },
   treesitter = { -- Registers the Achitek parser with nvim-treesitter.
@@ -82,7 +82,7 @@ Customize project root detection:
 ```lua
 require("achitek").setup({
   lsp = {
-    root_markers = { { "Achitekfile" }, "achitek.toml", ".git" },
+    root_markers = { { "Achitekfile", "achitekfile" }, ".git" },
   },
 })
 ```

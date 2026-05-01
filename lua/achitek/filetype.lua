@@ -6,6 +6,9 @@ function M.setup()
       Achitekfile = "achitekfile",
       achitekfile = "achitekfile",
     },
+    extension = {
+      tera = "tera",
+    },
   })
 end
 
