@@ -42,6 +42,7 @@ end
 local function setup_with_vim_lsp(name, config)
 	vim.lsp.config(name, {
 		cmd = config.cmd,
+		cmd_env = config.cmd_env,
 		filetypes = config.filetypes,
 		root_markers = config.root_markers,
 		single_file_support = config.single_file_support,
